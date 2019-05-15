@@ -4,6 +4,7 @@ __date__ = '15/04/19'
 
 import json
 import os
+from django.conf import settings
 from django.http.response import HttpResponseBadRequest
 from rest_framework.views import APIView, Response
 
@@ -16,14 +17,14 @@ class GetMigrationProgress(APIView):
         if username:
             pathname = \
                 os.path.join(
-                    '/home/web/media',
-                    'data-migration-progress/{}.txt'.format(
-                        username))
-            found = os.path.exists(pathname)
+                    settings.MEDIA_FOLDER_PATH, 'data-migration-progress')
+            progress_file = \
+                os.path.join(pathname, '{}.txt'.format(username))
+            found = os.path.exists(progress_file)
 
             if not found:
                 return HttpResponseBadRequest('Data not found.')
 
-            with open(pathname) as json_file:
+            with open(progress_file) as json_file:
                 data = json.load(json_file)
                 return Response(data)

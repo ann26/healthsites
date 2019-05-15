@@ -4,6 +4,7 @@ import json
 import logging
 from datetime import datetime
 
+from django.conf import settings
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.models import User
 from django.core.serializers.json import DjangoJSONEncoder
@@ -74,9 +75,11 @@ class ProfilePage(TemplateView):
 
             pathname = \
                 os.path.join(
-                    '/home/web/media',
-                    'data-migration-progress/{}.txt'.format(user))
-            found = os.path.exists(pathname)
+                    settings.MEDIA_FOLDER_PATH, 'data-migration-progress')
+            progress_file = \
+                os.path.join(pathname, '{}.txt'.format(user))
+            found = os.path.exists(progress_file)
+
             if found:
                 context['data_migration_in_progress'] = True
 

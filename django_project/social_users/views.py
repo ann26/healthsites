@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import os
 import json
 import logging
 from datetime import datetime
@@ -15,6 +16,7 @@ from braces.views import LoginRequiredMixin
 
 from api.models.user_api_key import UserApiKey
 from core.utilities import extract_time
+from localities.models import Locality
 from localities.utils import (
     extract_updates,
     get_update_detail,
@@ -62,6 +64,22 @@ class ProfilePage(TemplateView):
 
         context['api_keys'] = None
         if self.request.user == user:
+
+            old_data = Locality.objects.filter(
+                changeset__social_user__username=user, migrated=False
+            )
+
+            if old_data:
+                context['old_data_available'] = True
+
+            pathname = \
+                os.path.join(
+                    '/home/web/media',
+                    'data-migration-progress/{}.txt'.format(user))
+            found = os.path.exists(pathname)
+            if found:
+                context['data_migration_in_progress'] = True
+
             autogenerate_api_key = False
             if user.is_superuser:
                 autogenerate_api_key = True

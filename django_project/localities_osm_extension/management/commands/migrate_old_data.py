@@ -2,6 +2,8 @@
 __author__ = 'Anita Hapsari <anita@kartoza.com>'
 __date__ = '14/05/19'
 
+import json
+import os
 import sys
 from django.core.management.base import BaseCommand
 from localities.models import Locality
@@ -39,7 +41,9 @@ class Command(BaseCommand):
             changeset__social_user__username=options['username']
         )
 
+        counter = 0
         for locality in query:
+            counter = counter + 1
             values = locality.repr_dict()
 
             if values.get('osm_id', None):
@@ -75,6 +79,30 @@ class Command(BaseCommand):
                     )
                     if created:
                         print('Tag {}: {} is created'.format(item, value))
+
                 print('')
+
+            locality.migrated = True
+            locality.save()
+
+            pathname = \
+                os.path.join(
+                    '/home/web/media',
+                    'data-migration-progress/{}.txt'.format(
+                        options['username']))
+            found = os.path.exists(pathname)
+
+            if not found:
+                makepath = '/home/web/media/data-migration-progress/'
+                if not os.path.exists(makepath):
+                    os.makedirs(makepath)
+
+            data_counter = {
+                'count': counter,
+                'total': query.count()
+            }
+            f = open(pathname, 'w+')
+            f.write(json.dumps(data_counter))
+            f.close()
 
         print('Migrating old data is finished.')

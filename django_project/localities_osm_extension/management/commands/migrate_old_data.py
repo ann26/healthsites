@@ -99,8 +99,7 @@ class Command(BaseCommand):
             found = os.path.exists(pathname)
 
             if not found:
-                if not os.path.exists(pathname):
-                    os.makedirs(pathname)
+                os.makedirs(pathname)
 
             data_counter = {
                 'count': idx + 1,

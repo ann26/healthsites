@@ -32,7 +32,7 @@
                         {% endif %}
                     {% endfor %}
                 {% endif %}
-                {% if not user.profile_picture and not user.social_auth.get.extra_data.avatar %}
+                {% if user.profile_picture == "" and not user.social_auth.get.extra_data.avatar %}
                     <img class="profile-image" src="{% static "img/no-profile-img.gif" %}"/>
                 {% elif user.social_auth.get.extra_data.avatar %}
                     <img class="profile-image" src="{{ user.social_auth.get.extra_data.avatar }}"/>

@@ -75,7 +75,7 @@ class ProfilePage(TemplateView):
 
             pathname = \
                 os.path.join(
-                    settings.MEDIA_FOLDER_PATH, 'data-migration-progress')
+                    settings.CLUSTER_CACHE_DIR, 'data-migration-progress')
             progress_file = \
                 os.path.join(pathname, '{}.txt'.format(user))
             found = os.path.exists(progress_file)

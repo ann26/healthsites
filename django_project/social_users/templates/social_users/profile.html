@@ -6,15 +6,9 @@
 
 {% block content %}
     {% if old_data_available and not data_migration_in_progress %}
-        <div class="migration-info">We are migrating all data into OSM data, thus your healthsites data will not be displayed on the map. Please migrate your data into OSM data by clicking on the <b>Migrate</b> button.</div>
+        <div class="migration-info">We are migrating all data into OSM data, thus your healthsites data will not be displayed on the map. Please migrate your data into OSM data by clicking on <button class="btn btn-primary btn-migrate" onclick="migrateClicked()">Migrate</button>.</div>
     {% endif %}
     <section class="white container">
-        {% if old_data_available and not data_migration_in_progress %}
-            <div class="migrate-btn-wrapper">
-                <i class="fa fa-spinner fa-pulse loading-icon" style="display: none"></i>
-                <button class="btn btn-primary btn-migrate" onclick="migrateClicked()">Migrate</button>
-            </div>
-        {% endif %}
         <div class="col-sm-4 user-profile">
             <div class="profile-image-size">
                 {% if user.social_auth.get.provider == "openstreetmap" %}
